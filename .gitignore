@@ -1,0 +1,14 @@
+# 78MB camera master. The web encode (images/sonar-commercial.mp4) is the one
+# the site uses. Git keeps every version of a file forever, so keep this out.
+images/sonar-youtube-commercial.mp4
+
+# Local preview config for the dev server
+.claude/
+
+# OS clutter
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# A clone of another repo landed inside this folder; keep it out of this one.
+Brage Portfolio/
