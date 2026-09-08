@@ -316,12 +316,64 @@ footer{border-top:1px solid var(--paper-3);padding-block:32px}
 /* ---------- A11y ---------- */
 :focus-visible{outline:2.5px solid var(--red-bright);outline-offset:3px;border-radius:var(--r-xs)}
 .skip{position:absolute;left:-9999px}
+.print-only{display:none}
 .skip:focus{left:var(--gutter);top:10px;z-index:100;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:var(--r-sm);font-family:var(--display);font-size:14px}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .rise,.reveal{animation:none;opacity:1;transform:none;transition:none}
   .frame{transition:none}
+}
+
+/* ---------- Print / PDF ---------- */
+@media print{
+  /* Browsers drop backgrounds unless "Background graphics" is ticked, so force
+     what we can and make the dark band legible either way. */
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{size:A4;margin:14mm 12mm}
+
+  :root{--section-gap:30px;--gutter:0px}
+  body{background:#fff;font-size:10.5pt}
+
+  /* Screen-only furniture */
+  .nav,.skip,.stage-counter,.chapter .mobile-shot,.foot-in a[href="#top"]{display:none!important}
+  .print-only{display:block!important}
+
+  /* Entrance animations never run when printing, so their targets stay invisible */
+  .rise,.reveal,.frame{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}
+
+  /* The sticky scroller flattens into a plain stack of all five visuals */
+  .chapters{grid-template-columns:1fr;gap:0}
+  /* A4 is ~703 CSS px, which trips the max-width:900px rule that hides the stage.
+     Re-show it, unstuck, so all five case visuals print. */
+  .stage{display:block!important;position:static!important;height:auto;margin-bottom:20px}
+  .stage-inner{height:auto;border:0;background:none;overflow:visible}
+  .frame{position:static;margin-bottom:10px;break-inside:avoid}
+  .frame img{border:1px solid var(--paper-3);border-radius:var(--r-md)}
+
+  /* White-on-black prints as white-on-white, so invert the dark band */
+  .system{background:#fff!important;color:var(--ink)!important;border-block:1px solid var(--paper-3)}
+  .system h2{color:var(--ink)!important}
+  .system .lede{color:var(--ink-3)!important}
+  .sys-card{background:#fff!important;border:1px solid var(--paper-3)!important}
+  .sys-card h4{color:var(--ink)!important}
+  .sys-card p{color:var(--ink-3)!important}
+  .rd{background:var(--paper-2)!important;border-color:var(--paper-3)!important}
+
+  /* A video cannot play on paper, so show its poster */
+  .film-frame video{display:none!important}
+  .film-frame{background:none}
+
+  /* Roomier grids so nothing lands thumbnail-sized on A4 */
+  .craft-grid .tile{grid-column:span 3}
+  .craft-grid .w-2third,.craft-grid .w-half,.craft-grid .w-full{grid-column:span 6}
+  .sys-grid{grid-template-columns:1fr 1fr}
+
+  /* Keep blocks whole across page breaks */
+  .tile,.cap,.belief,.sys-card,.stat,.beat,.pullout,.film,.chapter{break-inside:avoid}
+  h1,h2,h3,h4{break-after:avoid}
+  .chapter{padding-block:20px}
+  .hero{padding-bottom:24px}
 }
 </style>
 </head>
@@ -571,9 +623,12 @@ footer{border-top:1px solid var(--paper-3);padding-block:32px}
         Your browser cannot play this video.
         <a href="images/sonar-commercial.mp4">Download the Sonar commercial</a> instead.
       </video>
+      <img class="print-only" src="images/sonar-commercial-poster.jpg" alt="Frame from the Sonar commercial">
     </div>
     <p class="film-note">
       The commercial was made entirely from scratch. The music is original, the storyboard was written by me and the animation was hand animated in Adobe After Effects.
+    
+      <span class="print-only">Watch it at bragebjanger.github.io</span>
     </p>
   </div>
 </section>
@@ -641,11 +696,11 @@ footer{border-top:1px solid var(--paper-3);padding-block:32px}
     <div>
       <div class="beat">
         <h4>What was wrong</h4>
-        <p>Someone could buy five different things from us and still not be able to say what Sinko was. Placeholder: the moment this became obvious, ideally something you watched someone do.</p>
+        <p>Someone could buy five different things from us and still not be able to say what Sinko was.</p>
       </div>
       <div class="beat">
         <h4>Three tiers, one sentence each</h4>
-        <p>Core, Plus and Studio each had to make sense in about ten seconds, on every page they unlock. Placeholder: what you cut from the pricing page to get there.</p>
+        <p>Core, Plus and Studio each had to make sense in about ten seconds, on every page they unlock.</p>
       </div>
       <div class="beat">
         <h4>You have to be able to see what you're getting</h4>
@@ -653,7 +708,7 @@ footer{border-top:1px solid var(--paper-3);padding-block:32px}
       </div>
       <div class="beat">
         <h4>What I can't prove yet</h4>
-        <p>It hasn't launched, so I have no conversion numbers. Placeholder: the two metrics you'll judge this on.</p>
+        <p>It hasn't launched, so I have no conversion numbers.</p>
       </div>
     </div>
     <div class="stack">
@@ -771,9 +826,7 @@ footer{border-top:1px solid var(--paper-3);padding-block:32px}
   <div class="wrap">
     <h2>How I work.</h2>
     <p class="lede narrow" style="margin-top:18px;color:var(--ink-3)">
-      Four things I've ended up believing, each of which cost me something. Placeholder: these are the ones
-      most worth putting in your own words. This section is where the site either sounds like you or it doesn't.
-    </p>
+      Four things I've ended up believing, each of which cost me something.</p>
     <div class="belief-list">
       <div class="belief">
         <span class="belief-idx">01</span>
@@ -786,7 +839,7 @@ footer{border-top:1px solid var(--paper-3);padding-block:32px}
         <span class="belief-idx">02</span>
         <div>
           <h3>Building it myself changes what I draw.</h3>
-          <p>If I design something awkward, I'm the one who has to sit there building it. Placeholder: something you simplified once you had to implement it.</p>
+          <p>If I design something awkward, I'm the one who has to sit there building it.</p>
         </div>
       </div>
       <div class="belief">
